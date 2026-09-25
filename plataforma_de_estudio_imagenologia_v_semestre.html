@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imagenología y Radiología - 5to Semestre | Cátedra Dr. Jorge Yee Guin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        medical: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            dark: '#0b1329',
+                            card: '#111c38'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #080d1a;
+            color: #e2e8f0;
+        }
+        .nav-active {
+            border-bottom: 3px solid #38bdf8;
+            color: #38bdf8 !important;
+            font-weight: 700;
+        }
+        .xray-glow {
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.15);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1329;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+
+    <!-- MENU SUPERIOR FIJO -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-slate-950/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Branding -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('portada')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-sky-500/30">
+                        RX
+                    </div>
+                    <div>
+                        <span class="text-lg sm:text-xl font-bold tracking-tight text-white block">Imagenología V</span>
+                        <span class="text-xs text-sky-400 font-medium hidden sm:block">Dr. Jorge Yee Guin</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-1 lg:space-x-2 text-sm font-medium">
+                    <button onclick="navigateTo('portada')" id="nav-portada" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">Portada</button>
+                    <button onclick="navigateTo('terminologia')" id="nav-terminologia" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">1. Introducción</button>
+                    <button onclick="navigateTo('generalidades')" id="nav-generalidades" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">2. Física de RX</button>
+                    <button onclick="navigateTo('torax-tecnica')" id="nav-torax-tecnica" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">3. Anatomía Tórax</button>
+                    <button onclick="navigateTo('patrones')" id="nav-patrones" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">4. Patrones</button>
+                    <button onclick="navigateTo('autoevaluacion')" id="nav-autoevaluacion" class="nav-btn px-3 py-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800/60 transition">5. Quiz</button>
+                    <button onclick="navigateTo('observaciones')" id="nav-observaciones" class="nav-btn px-3 py-2 rounded-lg text-amber-400 hover:text-amber-300 hover:bg-amber-950/40 transition">Nota Profe</button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="p-2 rounded-lg text-slate-300 hover:text-white hover:bg-slate-800 focus:outline-none">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-2 pb-4 space-y-1 text-base">
+            <button onclick="navigateTo('portada')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">Portada e Índice</button>
+            <button onclick="navigateTo('terminologia')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">1. Introducción y Planos</button>
+            <button onclick="navigateTo('generalidades')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">2. Física de RX y Densidades</button>
+            <button onclick="navigateTo('torax-tecnica')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">3. Técnica y Anatomía de Tórax</button>
+            <button onclick="navigateTo('patrones')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">4. Patrones Torácicos e Informes</button>
+            <button onclick="navigateTo('autoevaluacion')" class="block w-full text-left px-3 py-2.5 rounded-md text-slate-200 hover:bg-slate-800 font-medium">5. Autoevaluación</button>
+            <button onclick="navigateTo('observaciones')" class="block w-full text-left px-3 py-2.5 rounded-md text-amber-300 hover:bg-amber-950/50 font-medium">Observaciones del Profesor</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-16 flex-grow w-full">
+
+        <!-- SECCIÓN: PORTADA E ÍNDICE -->
+        <section id="sec-portada" class="content-section space-y-10">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-sky-950 p-8 sm:p-12 border border-slate-700/60 shadow-2xl xray-glow">
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-300 text-xs sm:text-sm font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+                        Cátedra Universitaria - 5to Semestre de Medicina
+                    </div>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                        Plataforma Académica de <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-300">Imagenología y Radiología</span>
+                    </h1>
+                    <p class="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed">
+                        Guía interactiva de estudio basada en los apuntes oficiales del <strong class="text-sky-300">Dr. Jorge Yee Guin</strong>. Diseñada para la revisión sistemática de términos, densidad radiológica, anatomía torácica y patrones patológicos.
+                    </p>
+                    <div class="pt-4 flex flex-wrap gap-4">
+                        <button onclick="navigateTo('terminologia')" class="px-6 py-3.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-base shadow-lg shadow-sky-500/30 transition transform hover:-translate-y-0.5">
+                            Comenzar Repaso
+                        </button>
+                        <button onclick="navigateTo('patrones')" class="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-base border border-slate-600 transition">
+                            Ver Patrones Torácicos
+                        </button>
+                    </div>
+                </div>
+                <!-- Background visual decor -->
+                <div class="absolute right-0 bottom-0 top-0 opacity-10 pointer-events-none hidden lg:flex items-center pr-10">
+                    <svg class="w-96 h-96 text-sky-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- ÍNDICE INTERACTIVO DE CONTENIDOS -->
+            <div class="space-y-6">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white flex items-center gap-3">
+                    <span class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center text-lg">📁</span>
+                    Índice de Módulos de Estudio
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Modulo 1 -->
+                    <div onclick="navigateTo('terminologia')" class="group p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-blue-500/20 text-blue-300">Módulo 1</span>
+                            <span class="text-sky-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition">Introducción y Terminología</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Planos anatómicos (Sagital, Coronal, Transversal), vectores direccionales, geometría de lesiones y glosario descriptivo.</p>
+                    </div>
+
+                    <!-- Modulo 2 -->
+                    <div onclick="navigateTo('generalidades')" class="group p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300">Módulo 2</span>
+                            <span class="text-sky-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition">Física de RX y Densidades</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Descubrimiento de Roentgen, Tubo de RX (99% calor / 1% RX), las 5 densidades fundamentales y protección radiológica.</p>
+                    </div>
+
+                    <!-- Modulo 3 -->
+                    <div onclick="navigateTo('torax-tecnica')" class="group p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300">Módulo 3</span>
+                            <span class="text-sky-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition">Técnica y Anatomía de Tórax</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Proyecciones (PA, AP, Lordótica), criterios de calidad (Dureza, Rotación, Inspiración) y anatomía hiliar/mediastínica.</p>
+                    </div>
+
+                    <!-- Modulo 4 -->
+                    <div onclick="navigateTo('patrones')" class="group p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300">Módulo 4</span>
+                            <span class="text-sky-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition">Patrones Torácicos e Informes</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Los 9 patrones radiopacos (Alveolar, Atelectásico, Miliar, Nodular, Masa, etc.) y redacción sistemática del informe radiológico.</p>
+                    </div>
+
+                    <!-- Modulo 5 -->
+                    <div onclick="navigateTo('autoevaluacion')" class="group p-6 rounded-2xl bg-slate-900 border border-slate-800 hover:border-sky-500/50 hover:bg-slate-800/80 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300">Módulo 5</span>
+                            <span class="text-sky-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition">Autoevaluación Interactiva</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Cuestionario interactivo con preguntas clave de todos los bloques y respuestas desplegables para verificar tu nivel.</p>
+                    </div>
+
+                    <!-- Modulo 6 -->
+                    <div onclick="navigateTo('observaciones')" class="group p-6 rounded-2xl bg-amber-950/20 border border-amber-800/50 hover:border-amber-500/60 transition cursor-pointer shadow-lg">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300">Nota Especial</span>
+                            <span class="text-amber-400 group-hover:translate-x-1 transition">→</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-amber-200 mb-2">Conceptos Complementarios</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed">Lista estricta de términos e información complementaria que no consta en las diapositivas y se requiere para el dominio total.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 1: INTRODUCCIÓN Y TERMINOLOGÍA -->
+        <section id="sec-terminologia" class="content-section hidden space-y-10">
+            <div class="border-b border-slate-800 pb-5">
+                <span class="text-sky-400 font-semibold text-sm tracking-wider uppercase">Bloque Académico I</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Introducción y Terminología Anatómica/Descriptiva</h2>
+                <p class="text-slate-400 text-lg mt-2">Bases de orientación espacial, morfología e inventario terminológico según los apuntes del Dr. Jorge Yee Guin.</p>
+            </div>
+
+            <!-- CONCEPTOS CLAVE CON DEFINICIÓN Y EJEMPLO -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="text-sky-400">●</span> Conceptos Clave del Módulo
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Concepto 1 -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <h4 class="text-lg font-bold text-sky-400">Planos Anatómicos Principales</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <strong class="text-white">Definición:</strong> Superficies imaginarias que dividen el cuerpo humano para su estudio y localización.
+                            <br>• <em>Plano Sagital:</em> Divide en derecha e izquierda.
+                            <br>• <em>Plano Coronal:</em> Divide en anterior y posterior.
+                            <br>• <em>Plano Transversal:</em> Divide en superior e inferior.
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                            <strong class="text-sky-300">Ejemplo en apuntes:</strong> Localización del lóbulo frontal (anterior) o sagital en orientación de imagen.
+                        </div>
+                    </div>
+
+                    <!-- Concepto 2 -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <h4 class="text-lg font-bold text-sky-400">Vectores de Orientación Espacial</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <strong class="text-white">Definición:</strong> Ejes direccionales que relacionan estructuras entre sí respecto a la línea media (<em>midline</em>) y extremos.
+                            <br>• <em>Proximal vs Distal</em>
+                            <br>• <em>Medial vs Lateral</em>
+                            <br>• <em>Anterior vs Posterior</em> / <em>Superior vs Inferior</em>
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                            <strong class="text-sky-300">Ejemplo en apuntes:</strong> Determinación de posición medial del hilio o bordes laterales mediastínicos.
+                        </div>
+                    </div>
+
+                    <!-- Concepto 3 -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <h4 class="text-lg font-bold text-sky-400">Geometría de las Imágenes</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <strong class="text-white">Definición:</strong> Formas geométricas normalizadas para categorizar la apariencia morfológica de cualquier hallazgo o lesión.
+                            <br><em>Tipos:</em> Redonda, Ovoide, Biconvexa, Cuadrada, Rectangular, Cilíndrica o tubular, Triangular, Semiluna, Irregular, Ramificada.
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                            <strong class="text-sky-300">Ejemplo en apuntes:</strong> Un nódulo o masa pulmonar tiene forma <em>Redondeada</em>.
+                        </div>
+                    </div>
+
+                    <!-- Concepto 4 -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <h4 class="text-lg font-bold text-sky-400">Forma y Definición de los Bordes</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <strong class="text-white">Definición:</strong> Criterio cualitativo del contorno de una lesión.
+                            <br>• <em>Forma de bordes:</em> Regular, Irregular, Lobulados.
+                            <br>• <em>Definición:</em> Bien definido vs Mal o poco definido.
+                        </p>
+                        <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                            <strong class="text-sky-300">Ejemplo en apuntes:</strong> Nódulo benigno (bordes regulares/definidos) vs Neumonía alveolar (bordes mal definidos).
+                        </div>
+                    </div>
+
+                    <!-- Concepto 5 -->
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 md:col-span-2">
+                        <h4 class="text-lg font-bold text-sky-400">Glosario de Términos Descriptivos y Localización</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-slate-300">
+                            <div>
+                                <strong class="text-white text-sm block mb-1">Efectos y Procesos:</strong>
+                                • Colapso / Semicolapso<br>
+                                • Desplazamiento / Dilatación<br>
+                                • Borramiento / Ensanchamiento<br>
+                                • Mala diferenciación / Acentuación<br>
+                                • Puntiforme / Alteración de la continuidad
+                            </div>
+                            <div>
+                                <strong class="text-white text-sm block mb-1">Ubicación Anatómica:</strong>
+                                • Periferia vs Central<br>
+                                • Plural vs Singular<br>
+                                • Contenido / Lado / Lóbulo / Región<br>
+                                • Ej. Lóbulos cerebrales: Frontal, Parietal, Temporal, Occipital.
+                            </div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800 mt-2">
+                            <strong class="text-sky-300">Ejemplo en apuntes:</strong> La atelectasia masiva produce <em>desplazamiento / retracción</em> de la tráquea e hiperventilación contralateral.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESQUEMA VISUAL DE CORRELACIÓN -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-6">
+                <h3 class="text-xl sm:text-2xl font-bold text-white">Esquema Visual: Relación de Términos Descriptivos</h3>
+                <div class="overflow-x-auto">
+                    <div class="min-w-[600px] p-6 bg-slate-950 rounded-2xl border border-slate-800 text-center space-y-6">
+                        <div class="inline-block px-6 py-2 rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-300 font-bold">
+                            DESCRIPCIÓN DE LA LESION / HALLAZGO
+                        </div>
+                        <div class="grid grid-cols-4 gap-4 text-xs">
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                                <span class="font-bold text-white block">1. GEOMETRÍA</span>
+                                <span class="text-slate-400">Redonda, Ovoide, Biconvexa, Tubular, etc.</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                                <span class="font-bold text-white block">2. BORDES</span>
+                                <span class="text-slate-400">Regulares / Irregulares<br>Bien / Mal definidos</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                                <span class="font-bold text-white block">3. UBICACIÓN</span>
+                                <span class="text-slate-400">Central / Periférica<br>Lóbulo / Región</span>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                                <span class="font-bold text-white block">4. EFECTOS</span>
+                                <span class="text-slate-400">Borramiento, Desplazamiento, Colapso</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: GENERALIDADES Y FÍSICA DE RAYOS X -->
+        <section id="sec-generalidades" class="content-section hidden space-y-10">
+            <div class="border-b border-slate-800 pb-5">
+                <span class="text-sky-400 font-semibold text-sm tracking-wider uppercase">Bloque Académico II</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Generalidades, Física de RX y Densidades Radiológicas</h2>
+                <p class="text-slate-400 text-lg mt-2">Historia, funcionamiento del Tubo de RX, el espectro de las 5 densidades y protocolos de Protección Radiológica.</p>
+            </div>
+
+            <!-- CONCEPTOS CLAVE CON DEFINICIÓN Y EJEMPLO -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Concepto Roentgen -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <h4 class="text-lg font-bold text-sky-400">Wilhelm Conrad Roentgen (1895)</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        <strong class="text-white">Definición:</strong> Físico alemán galardonado con el primer Premio Nobel de Física en 1901 por el descubrimiento de una radiación invisible más penetrante que la radiación UV. La denominó "Rayos X" debido a su naturaleza en ese momento desconocida (también llamados rayos Roentgen).
+                    </p>
+                    <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                        <strong class="text-sky-300">Nota del apunte:</strong> Hito fundacional del diagnóstico por imagen.
+                    </div>
+                </div>
+
+                <!-- Concepto Tubo de RX -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <h4 class="text-lg font-bold text-sky-400">Producción de Rayos X y Tubo de RX</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        <strong class="text-white">Definición:</strong> Los Rayos X se producen siempre que se bombardea un objeto material con electrones de alta velocidad dentro de una ampolla de vidrio al vacío con un Cátodo (electrodo negativo -) y un Ánodo (electrodo positivo +).
+                        <br><span class="text-amber-400 font-bold">Rendimiento energético:</span> <strong>99% se pierde como calor</strong> y solo el <strong>1% se convierte en Rayos X</strong>.
+                    </p>
+                    <div class="p-3 rounded-xl bg-slate-950 text-xs text-slate-400 border border-slate-800">
+                        <strong class="text-sky-300">Ejemplo en apuntes:</strong> Diagrama técnico del tubo de vacío Philips.
+                    </div>
+                </div>
+
+                <!-- Propiedades de RX -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 md:col-span-2">
+                    <h4 class="text-lg font-bold text-sky-400">4 Propiedades Fundamentales de los Rayos X</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs text-slate-300 mt-2">
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <strong class="text-white block text-sm mb-1">1. Penetración y Absorción</strong>
+                            Atraviesan los cuerpos opacos a la luz y son absorbidos según el espesor y el peso atómico del objeto.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <strong class="text-white block text-sm mb-1">2. Efecto Fotográfico</strong>
+                            Impresionan y activan las placas fotográficas o detectores digitales.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <strong class="text-white block text-sm mb-1">3. Propagación Rectilínea</strong>
+                            Se propagan en línea recta en todas las direcciones y NO sufren desviación por campos magnéticos o eléctricos.
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <strong class="text-white block text-sm mb-1">4. Velocidad</strong>
+                            Viajan exactamente a la velocidad de la luz (c).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Densidades y Contraste -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 md:col-span-2">
+                    <h4 class="text-lg font-bold text-sky-400">Escala de Densidades Radiológicas (Contraste Tonal)</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        El contraste está determinado por las tonalidades de zonas blancas y negras de la radiografía. Se dividen en tejidos <strong>Radiolúcidos (Radiotransparentes)</strong> que los Rx atraviesan fácilmente (se ven negros) y tejidos <strong>Radiopacos</strong> que absorben los Rx impidiendo que la radiación traspase (se ven blancos).
+                    </p>
+                    <!-- Matriz de Densidades -->
+                    <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+                        <div class="p-3 rounded-xl bg-black border border-slate-700 text-center">
+                            <span class="text-white font-bold block text-sm">1. AIRE</span>
+                            <span class="text-xs text-slate-400">Color: NEGRO</span>
+                            <span class="text-[10px] text-sky-300 block mt-1">Radiolúcido</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-600 border border-slate-500 text-center">
+                            <span class="text-white font-bold block text-sm">2. GRASA</span>
+                            <span class="text-xs text-slate-200">Color: GRIS</span>
+                            <span class="text-[10px] text-slate-300 block mt-1">Gris intermedio</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-300 text-slate-950 text-center font-semibold">
+                            <span class="font-bold block text-sm">3. AGUA / LIQUIDO</span>
+                            <span class="text-xs text-slate-800">Blanco (Mate)</span>
+                            <span class="text-[10px] text-slate-700 block mt-1">Tejidos blandos</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-white text-slate-950 text-center font-bold">
+                            <span class="block text-sm">4. HUESO</span>
+                            <span class="text-xs text-slate-700">Blanco (Macizo)</span>
+                            <span class="text-[10px] text-slate-800 block mt-1">Radiopaco denso</span>
+                        </div>
+                        <div class="p-3 rounded-xl bg-cyan-100 text-slate-950 text-center font-extrabold shadow-lg shadow-cyan-300/30">
+                            <span class="block text-sm">5. METAL</span>
+                            <span class="text-xs text-slate-800">Blanco (Brillante)</span>
+                            <span class="text-[10px] text-slate-800 block mt-1">Absorción total</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Protección Radiológica -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 md:col-span-2">
+                    <h4 class="text-lg font-bold text-sky-400">Protección Radiológica</h4>
+                    <p class="text-slate-300 text-sm">
+                        Pilares fundamentales para la minimización de la dosis de radiación: <strong class="text-amber-300">PROTECCIÓN / BLINDAJE</strong>, <strong class="text-amber-300">DISTANCIA</strong> y <strong class="text-amber-300">TIEMPO</strong>.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs pt-2">
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">Mandil plomado</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">Collarete tiroideo</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">Guantes plomados</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">Gafas plomadas</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">Protección gonadal</span>
+                        <span class="px-3 py-1.5 rounded-lg bg-sky-950 border border-sky-800 text-sky-300 font-bold">Dosímetro personal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMULACIÓN INTERACTIVA 1: TUBOS DE RX Y ABSORCIÓN DE DENSIDADES -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-sky-500/30 shadow-2xl space-y-6 xray-glow">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold">Laboratorio Interactivo I</span>
+                        <h3 class="text-2xl font-bold text-white mt-1">Simulador de Tubo de Rayos X y Absorción de Tejidos</h3>
+                    </div>
+                    <p class="text-xs text-slate-400">Ajusta la velocidad de electrones y el tejido para simular la imagen en placa.</p>
+                </div>
+
+                <!-- Controls & Canvas Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Controls Panel -->
+                    <div class="space-y-5 bg-slate-950 p-5 rounded-2xl border border-slate-800">
+                        <h4 class="text-sm font-bold text-sky-400 uppercase tracking-wider">Parámetros del Tubo</h4>
+
+                        <!-- Slider electrones -->
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>Velocidad de Electrones (kVp)</span>
+                                <span id="kvp-value" class="font-bold text-sky-400">70 kVp</span>
+                            </div>
+                            <input type="range" id="kvp-slider" min="30" max="120" value="70" oninput="updateRxSimulation()" class="w-full accent-sky-500 cursor-pointer">
+                        </div>
+
+                        <!-- Selector de Material/Tejido -->
+                        <div>
+                            <label class="text-xs text-slate-300 block mb-2 font-medium">Tejido / Objeto de Prueba:</label>
+                            <select id="tissue-select" onchange="updateRxSimulation()" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl p-2.5 text-sm focus:outline-none focus:border-sky-500">
+                                <option value="aire">1. AIRE (Pulmón / Radiolúcido)</option>
+                                <option value="grasa">2. GRASA (Gris intermedio)</option>
+                                <option value="agua" selected>3. AGUA / TEJIDO BLANDO (Blanco mate)</option>
+                                <option value="hueso">4. HUESO (Blanco macizo)</option>
+                                <option value="metal">5. METAL (Blanco brillante)</option>
+                            </select>
+                        </div>
+
+                        <!-- Energy Efficiency Gauge -->
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-slate-400">Pérdida Térmica (Calor):</span>
+                                <span class="text-amber-400 font-bold">99%</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 w-[99%]"></div>
+                            </div>
+                            <div class="flex justify-between text-xs pt-1">
+                                <span class="text-slate-400">Emisión Real de RX:</span>
+                                <span class="text-sky-400 font-bold">1%</span>
+                            </div>
+                            <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-sky-400 w-[1%] animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- Real-time Status Box -->
+                        <div id="sim-status-box" class="p-3 rounded-xl bg-sky-950/40 border border-sky-800/50 text-xs text-sky-200">
+                            <strong>Resumen:</strong> Los electrones chocan con el ánodo generando 99% calor. Los fotones penetran el tejido.
+                        </div>
+                    </div>
+
+                    <!-- Visual Representation Canvas -->
+                    <div class="lg:col-span-2 bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col items-center justify-between gap-6 relative">
+                        <!-- Graphic Scheme Tube -> Tissue -> Film -->
+                        <div class="w-full flex flex-col sm:flex-row items-center justify-around gap-4 py-4 relative">
+                            <!-- Cathode & Anode Box -->
+                            <div class="flex flex-col items-center text-center p-3 rounded-xl bg-slate-900 border border-slate-800 w-32">
+                                <span class="text-[10px] text-rose-400 font-bold uppercase">Cátodo (-) → Ánodo (+)</span>
+                                <div class="w-12 h-12 my-2 rounded-full border-2 border-amber-500/80 flex items-center justify-center bg-amber-500/10 text-amber-300 font-bold text-xs">
+                                    TUBO RX
+                                </div>
+                                <span class="text-[10px] text-slate-400">Ampolla al Vacío</span>
+                            </div>
+
+                            <!-- Beam Arrow -->
+                            <div class="flex flex-col items-center">
+                                <span class="text-[10px] text-sky-400 font-mono">Haz de RX (1%)</span>
+                                <svg class="w-12 h-6 text-sky-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </div>
+
+                            <!-- Selected Material Object -->
+                            <div id="material-box" class="flex flex-col items-center text-center p-4 rounded-xl border-2 transition-all w-36">
+                                <span id="material-label" class="font-bold text-xs text-white">AGUA / LIQUIDO</span>
+                                <span id="material-sub" class="text-[10px] text-slate-400">Espesor & Peso Atómico</span>
+                            </div>
+
+                            <!-- Beam Arrow 2 -->
+                            <div class="flex flex-col items-center">
+                                <span class="text-[10px] text-slate-400 font-mono">Transmisión</span>
+                                <svg class="w-12 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </div>
+
+                            <!-- Resulting Photographic Plate Preview -->
+                            <div class="flex flex-col items-center">
+                                <span class="text-[10px] text-slate-300 font-bold mb-1">Placa Fotográfica</span>
+                                <div id="plate-result" class="w-20 h-24 rounded-lg border-2 border-slate-600 flex items-center justify-center text-center p-1 text-[11px] font-bold shadow-inner transition-all duration-300">
+                                    BLANCO MATE
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terminology badge -->
+                        <div class="w-full flex justify-between items-center bg-slate-900 px-4 py-2.5 rounded-xl border border-slate-800 text-xs">
+                            <span class="text-slate-400">Comportamiento del Tejido:</span>
+                            <span id="radioterm-badge" class="px-3 py-1 rounded-full font-bold bg-slate-800 text-white">RADIOPACO</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: TÉCNICA Y ANATOMÍA RADIOLÓGICA DE TÓRAX -->
+        <section id="sec-torax-tecnica" class="content-section hidden space-y-10">
+            <div class="border-b border-slate-800 pb-5">
+                <span class="text-sky-400 font-semibold text-sm tracking-wider uppercase">Bloque Académico III</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Técnicas Radiológicas y Anatomía Normal del Tórax</h2>
+                <p class="text-slate-400 text-lg mt-2">Proyecciones, evaluación técnica sistematizada (Dureza, Rotación, Inspiración) y estructuras anatómicas clave.</p>
+            </div>
+
+            <!-- PROYECCIONES RADIOLÓGICAS DE TÓRAX -->
+            <div class="space-y-6">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <span class="text-sky-400">●</span> Proyecciones y Técnicas Especiales (Bucky Mural)
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-sky-500/20 text-sky-300 text-xs font-bold">Estándar de Tórax</span>
+                        <h4 class="text-xl font-bold text-white">PosteroAnterior (PA)</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Proyección habitual y estándar para el estudio de parénquima, hilios y silueta cardíaca. El paciente apoya el tórax anterior contra el chasis/detector.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold">Pacientes Críticos</span>
+                        <h4 class="text-xl font-bold text-white">AnteroPosterior (AP)</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Indicada de rutina para enfermos en Unidades de Cuidados Intensivos (UCI) o encamados que no pueden ponerse de pie.
+                        </p>
+                    </div>
+
+                    <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                        <span class="px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold">Técnicas Especiales</span>
+                        <h4 class="text-xl font-bold text-white">Decúbito Lateral & Lordótica</h4>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            • <em>Decúbito lateral con rayo horizontal:</em> Útil para la confirmación de derrames pleurales libres.<br>
+                            • <em>Proyección Lordótica:</em> Evalúa vértices pulmonares.<br>
+                            • <em>Proyección Lateral (D e I).</em>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CRITERIOS TÉCNICOS DE CALIDAD (DUREZA, ROTACIÓN, INSPIRACIÓN) -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-6">
+                <h3 class="text-2xl font-bold text-white">Características Técnicas de Calidad de la Placa</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- DUREZA -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                        <h4 class="text-lg font-bold text-sky-400">1. DUREZA (PENETRACIÓN)</h4>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><strong class="text-emerald-400">Normal:</strong> Placa de tono grisáceo. Se observan algunas vértebras por detrás de la silueta cardíaca.</li>
+                            <li><strong class="text-amber-400">Dura o Penetrada ("Quemada"):</strong> El pulmón se observa negro y se distinguen muy bien los cuerpos vertebrales retrocardíacos.</li>
+                            <li><strong class="text-rose-400">Blanda o Poco Penetrada:</strong> Características inversas (aspecto blanquecino difuso).</li>
+                        </ul>
+                    </div>
+
+                    <!-- ROTACIÓN -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                        <h4 class="text-lg font-bold text-sky-400">2. ROTACIÓN</h4>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><strong class="text-emerald-400">Centrada:</strong> Las clavículas equidistan y están bien centradas con respecto a las apófisis espinosas vertebrales.</li>
+                            <li><strong class="text-rose-400">Rotada:</strong> Desviación asimétrica de las clavículas respecto al eje espinoso.</li>
+                        </ul>
+                    </div>
+
+                    <!-- INSPIRACIÓN -->
+                    <div class="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                        <h4 class="text-lg font-bold text-sky-400">3. INSPIRACIÓN</h4>
+                        <ul class="text-xs text-slate-300 space-y-2">
+                            <li><strong class="text-emerald-400">Bien Inspirada:</strong> Se cuentan como mínimo de <strong>9 a 10 arcos costales posteriores</strong> (o sino 8 a 9 espacios intercostales). Ángulos costodiafragmáticos bien visibles en pico.</li>
+                            <li><strong class="text-rose-400">Mal Inspirada:</strong> Origina imágenes falsas de <em>pseudocardiomegalia</em>.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANATOMÍA DEL TÓRAX Y MEDIASTINO -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Hilios Pulmonares -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <h4 class="text-xl font-bold text-sky-400">Hilios Pulmonares</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Contienen arterias, venas, bronquios y ganglios linfáticos.
+                        <br>• Son similares en tamaño y densidad.
+                        <br>• El <strong>hilio izquierdo está algo más alto</strong> debido a la salida en sentido horizontal del bronquio izquierdo.
+                        <br>• El <strong>bronquio derecho</strong> es la prolongación natural de la tráquea.
+                    </p>
+                </div>
+
+                <!-- Mediastino -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <h4 class="text-xl font-bold text-sky-400">Mediastino y Timo en Recién Nacidos</h4>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Espacio extrapleural comprendido entre ambos pulmones.
+                        <br>• <em>Límites:</em> Istmo cervical (arriba), diafragma (abajo), columna y arcos costales (atrás), esternón (delante).
+                        <br>• <em>Contenido:</em> Corazón, grandes vasos, hilios, timo, tráquea, esófago.
+                        <br>• <strong class="text-amber-300">Signo de la Vela:</strong> En el tórax normal del recién nacido (RN), el borde inferior del timo se superpone con los bordes cardíacos.
+                    </p>
+                </div>
+
+                <!-- Anatómica Lobulillar -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 md:col-span-2">
+                    <h4 class="text-xl font-bold text-sky-400">Jerarquía Anatómica Pulmonar y Senos Pleurales</h4>
+                    <div class="flex flex-wrap items-center justify-around gap-2 text-xs text-center p-4 bg-slate-950 rounded-xl border border-slate-800 font-bold">
+                        <span class="px-3 py-2 bg-slate-900 rounded-lg text-sky-300">PULMÓN</span> →
+                        <span class="px-3 py-2 bg-slate-900 rounded-lg text-sky-300">LÓBULO</span> →
+                        <span class="px-3 py-2 bg-slate-900 rounded-lg text-sky-300">SEGMENTO</span> →
+                        <span class="px-3 py-2 bg-slate-900 rounded-lg text-sky-300">LOBULILLO PULMONAR</span> →
+                        <span class="px-3 py-2 bg-slate-900 rounded-lg text-sky-300">ALVÉOLOS</span>
+                    </div>
+                    <p class="text-xs text-slate-400 pt-2">
+                        <strong>Sistemática de Lectura Radiológica:</strong> Descripción de Parénquima Pulmonar → Senos Costodiafragmáticos (Costofrénicos) / Cardiofrénicos → Hilios Pulmonares → Diafragmas → Tráquea y Mediastino → Corazón y Grandes Vasos → Huesos y Partes Blandas.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 4: PATRONES TORÁCICOS E INFORMES RADIOLÓGICOS -->
+        <section id="sec-patrones" class="content-section hidden space-y-10">
+            <div class="border-b border-slate-800 pb-5">
+                <span class="text-sky-400 font-semibold text-sm tracking-wider uppercase">Bloque Académico IV</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Patrones Torácicos por Imágenes e Informes Clínicos</h2>
+                <p class="text-slate-400 text-lg mt-2">Signos guía, clasificación oficial de los 9 patrones radiopacos y estructura oficial del informe según el Dr. Yee Guin.</p>
+            </div>
+
+            <!-- DEFINICIÓN Y CLASIFICACIÓN GENERAL -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-2xl font-bold text-white">¿Qué es un Patrón Torácico?</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Conjunto de características visibles en Radiografía (RX) y Tomografía Computarizada (TC) que nos indican un determinado tipo de lesión anatómica y orientan hacia la patología o enfermedad de base del paciente.
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs pt-2">
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                        <strong class="text-white text-sm block mb-1">PATRONES RADIOPACOS (Imágenes Blancas):</strong>
+                        1. Alveolar | 2. Intersticial | 3. Atelectásico | 4. Miliar | 5. Nodular Solitario | 6. Nodular Múltiple | 7. Masa | 8. Hiliar.
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-950 border border-slate-800">
+                        <strong class="text-sky-300 text-sm block mb-1">PATRONES RADIOLÚCIDOS (Imágenes Negras):</strong>
+                        Caverna, Absceso, Quiste, Bulla, Enfisema, Bronquiectasias (asociado a Aspergiloma).
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMULADOR INTERACTIVO 2: INSPECTOR Y GENERADOR DE INFORMES RADIOLÓGICOS -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-sky-500/30 shadow-2xl space-y-6 xray-glow">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold">Laboratorio Interactivo II</span>
+                        <h3 class="text-2xl font-bold text-white mt-1">Generador de Informes Radiológicos & Inspector de Patrones</h3>
+                    </div>
+                    <p class="text-xs text-slate-400">Selecciona un patrón radiopaco para visualizar sus signos y su informe oficial en pantalla.</p>
+                </div>
+
+                <!-- Pattern Buttons Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                    <button onclick="selectPattern('alveolar')" id="btn-pat-alveolar" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">1. Alveolar</button>
+                    <button onclick="selectPattern('intersticial')" id="btn-pat-intersticial" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">2. Intersticial</button>
+                    <button onclick="selectPattern('atelectasico')" id="btn-pat-atelectasico" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">3. Atelectásico</button>
+                    <button onclick="selectPattern('miliar')" id="btn-pat-miliar" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">4. Miliar</button>
+                    <button onclick="selectPattern('nodular_benigno')" id="btn-pat-nodular_benigno" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">5. Nódulo Benigno</button>
+                    <button onclick="selectPattern('nodular_maligno')" id="btn-pat-nodular_maligno" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">6. Nódulo Maligno</button>
+                    <button onclick="selectPattern('nodular_multiple')" id="btn-pat-nodular_multiple" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">7. Nodular Múltiple</button>
+                    <button onclick="selectPattern('masa')" id="btn-pat-masa" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">8. Masa Pulmonar</button>
+                    <button onclick="selectPattern('hiliar')" id="btn-pat-hiliar" class="pat-btn p-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-sky-500 text-left text-xs font-bold text-slate-300 transition">9. Patrón Hiliar</button>
+                </div>
+
+                <!-- Simulation Visual & Dynamic Radiologic Report -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Visual Scheme Canvas Over X-Ray -->
+                    <div class="lg:col-span-5 bg-slate-950 p-4 rounded-2xl border border-slate-800 flex flex-col items-center justify-center min-h-[320px] relative overflow-hidden">
+                        <span class="text-[10px] text-sky-400 font-bold mb-2 uppercase tracking-wider">Esquema de Representación Gráfica RX</span>
+
+                        <!-- Chest Silhouette SVG -->
+                        <div id="chest-canvas" class="w-full h-64 bg-slate-900 rounded-xl border border-slate-800 relative flex items-center justify-center p-2">
+                            <!-- SVG Thorax outlines -->
+                            <svg class="w-full h-full text-slate-800" viewBox="0 0 200 240" fill="none" stroke="currentColor">
+                                <!-- Ribs / Lung fields -->
+                                <path d="M 40 40 Q 100 20 160 40 Q 170 120 160 200 Q 100 210 40 200 Q 30 120 40 40 Z" stroke-width="2" fill="#040814"/>
+                                <!-- Mediastinum / Heart -->
+                                <path d="M 90 40 L 90 200 Q 130 190 120 130 Q 110 90 90 40" fill="#1e293b" opacity="0.6"/>
+                                <!-- Trachea -->
+                                <line x1="95" y1="20" x2="95" y2="70" stroke="#38bdf8" stroke-width="3" stroke-dasharray="3 2"/>
+                                <!-- Clavicles -->
+                                <path d="M 30 35 Q 65 45 95 45 M 170 35 Q 135 45 95 45" stroke="#475569" stroke-width="3"/>
+                            </svg>
+
+                            <!-- Overlay Dynamic Layer for Selected Pattern -->
+                            <div id="pattern-overlay" class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <!-- JS inserts specific SVG/HTML elements here -->
+                            </div>
+                        </div>
+
+                        <div id="pattern-sign-tag" class="mt-3 text-xs text-amber-300 font-bold bg-amber-950/60 px-3 py-1 rounded-full border border-amber-800">
+                            Signo Característico: Broncograma Aéreo
+                        </div>
+                    </div>
+
+                    <!-- Structured Official Report (Informe Radiológico Oficial) -->
+                    <div class="lg:col-span-7 bg-slate-950 p-6 rounded-2xl border border-slate-800 flex flex-col justify-between space-y-4 font-mono text-xs">
+                        <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                            <span class="text-sky-400 font-bold text-sm tracking-wider">INFORME RADIOLÓGICO OFICIAL</span>
+                            <span class="text-[10px] text-slate-400">Modelo Apuntes Dr. Yee Guin</span>
+                        </div>
+
+                        <div class="space-y-3 text-slate-300">
+                            <div>
+                                <span class="text-slate-500 block text-[10px] uppercase font-bold">TIPO DE EXAMEN:</span>
+                                <span id="rep-examen" class="text-white font-bold text-sm">RX STÁNDAR DE TÓRAX</span>
+                            </div>
+
+                            <div>
+                                <span class="text-slate-500 block text-[10px] uppercase font-bold">DESCRIPCIÓN DE HALLAZGOS:</span>
+                                <p id="rep-descripcion" class="text-sky-200 leading-relaxed bg-slate-900 p-3 rounded-xl border border-slate-800/80">
+                                    Se observa imagen radiopaca de bordes poco definidos, localizada en el lóbulo superior del pulmón derecho. Con pequeñas imágenes radiolúcidas ramificadas en su interior compatibles con broncogramas aéreos.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <span class="text-slate-500 block text-[10px] uppercase font-bold">TIPO DE PATRÓN:</span>
+                                    <span id="rep-patron" class="text-amber-300 font-bold">Patrón Alveolar</span>
+                                </div>
+                                <div>
+                                    <span class="text-slate-500 block text-[10px] uppercase font-bold">IMPRESIÓN DIAGNÓSTICA (ID):</span>
+                                    <span id="rep-id" class="text-emerald-400 font-bold">ID. NEUMONIA EN EL LOBULO SUPERIOR DEL PULMON DERECHO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 text-[10px] text-slate-500 border-t border-slate-800 flex justify-between">
+                            <span>Signos Guias Verificados</span>
+                            <span>Cátedra de Imagenología - V Semestre</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABLA DE RESUMEN COMPARATIVO DE LOS 9 PATRONES -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-900 border border-slate-800 space-y-4">
+                <h3 class="text-xl sm:text-2xl font-bold text-white">Resumen Criterios Diagnósticos (9 Patrones Radiopacos)</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300 border-collapse">
+                        <thead>
+                            <tr class="bg-slate-950 border-b border-slate-800 text-sky-400">
+                                <th class="p-3 font-bold">Patrón</th>
+                                <th class="p-3 font-bold">Bordes / Forma</th>
+                                <th class="p-3 font-bold">Tamaño / Cantidad</th>
+                                <th class="p-3 font-bold">Hallazgos / Signos Clave</th>
+                                <th class="p-3 font-bold">Impresión Diagnóstica (ID)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800">
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Alveolar</td>
+                                <td class="p-3">Mal definidos</td>
+                                <td class="p-3">Focal o diseminado</td>
+                                <td class="p-3 text-sky-300">Broncogramas aéreos, respeta cisuras</td>
+                                <td class="p-3 text-emerald-400">Neumonía lóbulo superior</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Intersticial</td>
+                                <td class="p-3">Reticular</td>
+                                <td class="p-3">Diseminado ambos pulmones</td>
+                                <td class="p-3 text-sky-300">Pérdida radiolucidez ("Pulmón sucio")</td>
+                                <td class="p-3 text-emerald-400">Neumonía intersticial</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Atelectásico</td>
+                                <td class="p-3">Mal definidos</td>
+                                <td class="p-3">Segmento, lóbulo o pulmón</td>
+                                <td class="p-3 text-sky-300">Retrae estructuras, columna desnuda, hiperventilación contralateral</td>
+                                <td class="p-3 text-emerald-400">Atelectasia masiva</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Miliar</td>
+                                <td class="p-3">Redondeada puntiforme</td>
+                                <td class="p-3">&lt; 3 mm / Múltiples dispersas</td>
+                                <td class="p-3 text-sky-300">Grano de mijo diseminado en ambos pulmones</td>
+                                <td class="p-3 text-emerald-400">Tuberculosis en fase miliar</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Nodular Solitario (Benigno)</td>
+                                <td class="p-3">Regulares, bien definidos</td>
+                                <td class="p-3">&lt; 3 cm / Única</td>
+                                <td class="p-3 text-sky-300">Imagen redondeada bien delimitada</td>
+                                <td class="p-3 text-emerald-400">Nódulo pulmonar solitario benigno</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Nodular Solitario (Maligno)</td>
+                                <td class="p-3">Mal definidos, espiculados</td>
+                                <td class="p-3">&lt; 3 cm / Única</td>
+                                <td class="p-3 text-sky-300">Bordes irregulares / espiculaciones</td>
+                                <td class="p-3 text-emerald-400">Nódulo pulmonar solitario maligno</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Nodular Múltiple</td>
+                                <td class="p-3">Redondeadas definidos/indefinidos</td>
+                                <td class="p-3">Diferentes tamaños / Múltiples</td>
+                                <td class="p-3 text-sky-300">Signo en "Suelta de globos"</td>
+                                <td class="p-3 text-emerald-400">Metástasis pulmonares</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Masa Pulmonar</td>
+                                <td class="p-3">Lobulados o irregulares</td>
+                                <td class="p-3">&gt; 3 cm</td>
+                                <td class="p-3 text-sky-300">Lesión expansiva de gran tamaño</td>
+                                <td class="p-3 text-emerald-400">Masa pulmonar izquierda</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/40">
+                                <td class="p-3 font-bold text-white">Hiliar</td>
+                                <td class="p-3">Regulares, lobulados</td>
+                                <td class="p-3">Agrupadas hiliares D e I</td>
+                                <td class="p-3 text-sky-300">Engrosamiento nodular hiliar bilateral</td>
+                                <td class="p-3 text-emerald-400">Adenopatías hiliares</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 5: AUTOEVALUACIÓN Y CUESTIONARIO -->
+        <section id="sec-autoevaluacion" class="content-section hidden space-y-10">
+            <div class="border-b border-slate-800 pb-5">
+                <span class="text-sky-400 font-semibold text-sm tracking-wider uppercase">Bloque Académico V</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">Autoevaluación Académica de Repaso</h2>
+                <p class="text-slate-400 text-lg mt-2">Pon a prueba tus conocimientos antes del examen. Haz clic en cada pregunta para desplegar la respuesta oficial.</p>
+            </div>
+
+            <div id="quiz-container" class="space-y-4">
+                <!-- Question 1 -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 uppercase">Pregunta 1 - Física de RX</span>
+                        <span class="text-xs text-slate-500">Apuntes Cap. 2</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">¿Cuál es el porcentaje exacto de rendimiento energético en el tubo de RX entre calor generado y radiación útil?</h3>
+                    <button onclick="toggleAnswer('ans-1')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition">
+                        Mostrar Respuesta / Explicación
+                    </button>
+                    <div id="ans-1" class="hidden p-4 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 space-y-1">
+                        <strong class="text-emerald-400 block">Respuesta Oficial:</strong>
+                        Gran parte de la energía de los electrones se pierde en forma de <strong>CALOR (99%)</strong> y sólo el <strong>1% restante corresponde a Rayos X</strong>.
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 uppercase">Pregunta 2 - Densidades</span>
+                        <span class="text-xs text-slate-500">Apuntes Cap. 2</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">Menciona las 5 densidades radiológicas fundamentales con su color representativo en la placa.</h3>
+                    <button onclick="toggleAnswer('ans-2')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition">
+                        Mostrar Respuesta / Explicación
+                    </button>
+                    <div id="ans-2" class="hidden p-4 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 space-y-1">
+                        <strong class="text-emerald-400 block">Respuesta Oficial:</strong>
+                        1. <strong>Aire:</strong> Negro (Radiolúcido)<br>
+                        2. <strong>Grasa:</strong> Gris<br>
+                        3. <strong>Agua / Tejido blando:</strong> Blanco mate (Radiopaco)<br>
+                        4. <strong>Hueso:</strong> Blanco macizo (Radiopaco)<br>
+                        5. <strong>Metal:</strong> Blanco brillante (Radiopaco)
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 uppercase">Pregunta 3 - Técnica de Tórax</span>
+                        <span class="text-xs text-slate-500">Apuntes Cap. 3</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">¿Cuál es el criterio para considerar una radiografía de tórax como BIEN INSPIRADA?</h3>
+                    <button onclick="toggleAnswer('ans-3')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition">
+                        Mostrar Respuesta / Explicación
+                    </button>
+                    <div id="ans-3" class="hidden p-4 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 space-y-1">
+                        <strong class="text-emerald-400 block">Respuesta Oficial:</strong>
+                        Deben contarse como mínimo de <strong>9 a 10 arcos costales posteriores</strong> o sino de <strong>8 a 9 espacios intercostales</strong>, con ángulos costodiafragmáticos bien visibles en pico.
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 uppercase">Pregunta 4 - Patrones Torácicos</span>
+                        <span class="text-xs text-slate-500">Apuntes Cap. 4</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">¿Qué signo radiológico caracteriza al Patrón Nodular Múltiple y cuál es su Impresión Diagnóstica clásica?</h3>
+                    <button onclick="toggleAnswer('ans-4')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition">
+                        Mostrar Respuesta / Explicación
+                    </button>
+                    <div id="ans-4" class="hidden p-4 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 space-y-1">
+                        <strong class="text-emerald-400 block">Respuesta Oficial:</strong>
+                        • <strong>Signo:</strong> Signo en "Suelta de globos" (imágenes redondeadas dispersas en ambos pulmones).<br>
+                        • <strong>Impresión Diagnóstica (ID):</strong> Metástasis Pulmonares.
+                    </div>
+                </div>
+
+                <!-- Question 5 -->
+                <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-sky-400 uppercase">Pregunta 5 - Diagnóstico Diferencial de Nódulo vs Masa</span>
+                        <span class="text-xs text-slate-500">Apuntes Cap. 4</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-white">¿Cuál es la diferencia de tamaño exacta entre un Nódulo Pulmonar Solitario y un Patrón Masa?</h3>
+                    <button onclick="toggleAnswer('ans-5')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sky-300 text-xs font-bold transition">
+                        Mostrar Respuesta / Explicación
+                    </button>
+                    <div id="ans-5" class="hidden p-4 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 space-y-1">
+                        <strong class="text-emerald-400 block">Respuesta Oficial:</strong>
+                        • <strong>Nódulo Pulmonar Solitario:</strong> Imagen redondeada radiopaca <strong>menor a 3 cm (&lt; 3 cm)</strong>.<br>
+                        • <strong>Patrón Masa:</strong> Imagen redondeada radiopaca <strong>mayor a 3 cm (&gt; 3 cm)</strong>.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 6: OBSERVACIONES DEL PROFESOR (CONCEPTOS NO INCLUIDOS EN APUNTES) -->
+        <section id="sec-observaciones" class="content-section hidden space-y-10">
+            <div class="border-b border-amber-800/60 pb-5">
+                <span class="text-amber-400 font-semibold text-sm tracking-wider uppercase">Requisito Pedagógico Estricto</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-amber-200 mt-1">Lista de Conceptos Faltantes (No presentes en el material)</h2>
+                <p class="text-slate-400 text-lg mt-2">
+                    En cumplimiento estricto con las instrucciones del encargo, el contenido de la plataforma se limitó <strong>exclusivamente a los apuntes adjuntos</strong>. A continuación detallo la lista formal de conceptos clave necesarios para el entendimiento integral de la asignatura que <u>NO figuraban en las diapositivas proporcionadas</u>:
+                </p>
+            </div>
+
+            <div class="p-6 sm:p-8 rounded-3xl bg-amber-950/20 border border-amber-800/50 space-y-6">
+                <div class="space-y-4 text-sm text-slate-300">
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                        <strong class="text-amber-300 text-base block">1. Parámetros Cuantitativos de Física Médica (mAs y kVp)</strong>
+                        <p class="text-slate-400">En los apuntes se menciona la velocidad de los electrones y el tubo de RX, pero no se detallan las definiciones formales ni la relación matemática entre el miliamperaje por segundo (mAs - cantidad de fotones) y los kilovoltios pico (kVp - penetrabilidad del haz).</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                        <strong class="text-amber-300 text-base block">2. Escala de Unidades Hounsfield (HU) en Tomografía Computarizada (TC)</strong>
+                        <p class="text-slate-400">Aunque se menciona la TC en la definición de patrones torácicos, faltan los valores numéricos cuantitativos de atenuación de tejidos (ej. Aire -1000 HU, Agua 0 HU, Hueso +1000 HU).</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                        <strong class="text-amber-300 text-base block">3. Detalle Anatómico de los 18 Segmentos Pulmonares</strong>
+                        <p class="text-slate-400">Las diapositivas incluyen la jerarquía (Lóbulo → Segmento → Lobulillo), pero no enumeran la nomenclatura de los segmentos broncopulmonares (ej. Apical, Posterior, Anterior, Lingular, etc.).</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                        <strong class="text-amber-300 text-base block">4. Descripción Detallada de Patrones Radiolúcidos y Pleurales</strong>
+                        <p class="text-slate-400">Se presenta la lista de términos radiolúcidos (caverna, absceso, quiste, bulla, enfisema, bronquiectasias) y pleurales, pero no se incluyen sus fichas descriptivas ni modelos de informes como sí se hizo con los 9 patrones radiopacos.</p>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
+                        <strong class="text-amber-300 text-base block">5. Efectos Biológicos de la Radiación Ionizante</strong>
+                        <p class="text-slate-400">Se enumeran los equipos de protección plomados y el dosímetro, pero faltan los conceptos de efectos estocásticos vs deterministas (reacciones tisulares) y el principio ALARA (As Low As Reasonably Achievable).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p class="font-semibold text-slate-400">Plataforma Docente de Imagenología y Radiología - V Semestre</p>
+            <p>Basado en el material de clases pregrado del <span class="text-sky-400">Dr. Jorge Yee Guin</span></p>
+            <p class="text-[10px] text-slate-600">"Si cuidas la naturaleza y el medio ambiente, estarás amando la VIDA".</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC (SINGLE FILE SPA NAVIGATION AND INTERACTIVE SIMULATORS) -->
+    <script>
+        // Function to navigate between sections without page reload
+        function navigateTo(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(sec => sec.classList.add('hidden'));
+
+            // Show target section
+            const target = document.getElementById('sec-' + sectionId);
+            if (target) {
+                target.classList.remove('hidden');
+            }
+
+            // Update Desktop Nav Active state
+            const navBtns = document.querySelectorAll('.nav-btn');
+            navBtns.forEach(btn => btn.classList.remove('nav-active'));
+            const activeBtn = document.getElementById('nav-' + sectionId);
+            if (activeBtn) {
+                activeBtn.classList.add('nav-active');
+            }
+
+            // Close Mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+
+            // Scroll to top smooth
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Toggle quiz answers
+        function toggleAnswer(ansId) {
+            const ans = document.getElementById(ansId);
+            if (ans) {
+                ans.classList.toggle('hidden');
+            }
+        }
+
+        // Simulation 1: RX Tube & Density Absorption Logic
+        function updateRxSimulation() {
+            const kvp = document.getElementById('kvp-slider').value;
+            const tissue = document.getElementById('tissue-select').value;
+
+            document.getElementById('kvp-value').innerText = kvp + ' kVp';
+
+            const matBox = document.getElementById('material-box');
+            const matLabel = document.getElementById('material-label');
+            const matSub = document.getElementById('material-sub');
+            const plateResult = document.getElementById('plate-result');
+            const radiotermBadge = document.getElementById('radioterm-badge');
+            const statusBox = document.getElementById('sim-status-box');
+
+            // Reset classes
+            matBox.className = "flex flex-col items-center text-center p-4 rounded-xl border-2 transition-all w-36 ";
+
+            if (tissue === 'aire') {
+                matBox.classList.add('border-slate-800', 'bg-slate-950');
+                matLabel.innerText = "1. AIRE";
+                matSub.innerText = "Pulmón / Gas";
+                plateResult.style.backgroundColor = "#000000";
+                plateResult.style.color = "#ffffff";
+                plateResult.innerText = "NEGRO";
+                radiotermBadge.innerText = "RADIOLÚCIDO (Radiotransparente)";
+                radiotermBadge.className = "px-3 py-1 rounded-full font-bold bg-black border border-slate-700 text-sky-400";
+                statusBox.innerHTML = "<strong>Aire:</strong> Los Rayos X lo atraviesan fácilmente. No hay absorción, impresionando la placa de color NEGRO.";
+            } else if (tissue === 'grasa') {
+                matBox.classList.add('border-slate-600', 'bg-slate-900');
+                matLabel.innerText = "2. GRASA";
+                matSub.innerText = "Tejido Adiposo";
+                plateResult.style.backgroundColor = "#4b5563";
+                plateResult.style.color = "#ffffff";
+                plateResult.innerText = "GRIS";
+                radiotermBadge.innerText = "DENSIDAD INTERMEDIA";
+                radiotermBadge.className = "px-3 py-1 rounded-full font-bold bg-slate-800 text-slate-300";
+                statusBox.innerHTML = "<strong>Grasa:</strong> Absorción baja-intermedia de la radiación. Se observa en tono GRIS.";
+            } else if (tissue === 'agua') {
+                matBox.classList.add('border-sky-500/50', 'bg-sky-950/30');
+                matLabel.innerText = "3. AGUA / TEJIDOS";
+                matSub.innerText = "Músculo / Órganos";
+                plateResult.style.backgroundColor = "#cbd5e1";
+                plateResult.style.color = "#0f172a";
+                plateResult.innerText = "BLANCO MATE";
+                radiotermBadge.innerText = "RADIOPACO (Mate)";
+                radiotermBadge.className = "px-3 py-1 rounded-full font-bold bg-slate-300 text-slate-950";
+                statusBox.innerHTML = "<strong>Agua / Tejidos Blandos:</strong> Absorben radiación moderadamente. Se visualizan en BLANCO MATE.";
+            } else if (tissue === 'hueso') {
+                matBox.classList.add('border-white', 'bg-slate-800');
+                matLabel.innerText = "4. HUESO";
+                matSub.innerText = "Estructura Ósea";
+                plateResult.style.backgroundColor = "#ffffff";
+                plateResult.style.color = "#0f172a";
+                plateResult.innerText = "BLANCO MACIZO";
+                radiotermBadge.innerText = "RADIOPACO DENSO";
+                radiotermBadge.className = "px-3 py-1 rounded-full font-bold bg-white text-slate-950";
+                statusBox.innerHTML = "<strong>Hueso:</strong> Gran peso atómico. Absorbe los Rx de tal manera que poca radiación la traspasa: BLANCO MACIZO.";
+            } else if (tissue === 'metal') {
+                matBox.classList.add('border-cyan-300', 'bg-cyan-950/40');
+                matLabel.innerText = "5. METAL";
+                matSub.innerText = "Prótesis / Marcapasos";
+                plateResult.style.backgroundColor = "#ecfeff";
+                plateResult.style.color = "#0891b2";
+                plateResult.innerText = "BRILANTE";
+                radiotermBadge.innerText = "RADIOPACO ABSOLUTO";
+                radiotermBadge.className = "px-3 py-1 rounded-full font-bold bg-cyan-200 text-cyan-950";
+                statusBox.innerHTML = "<strong>Metal:</strong> Bloqueo completo del haz de radiación. Tonalidad BLANCO BRILANTE extrema.";
+            }
+        }
+
+        // Data Store for the 9 Radiopaque Patterns from Dr. Yee Guin's slides
+        const patternsData = {
+            alveolar: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa imagen radiopaca de bordes poco definidos, localizada en el lóbulo superior del pulmón derecho. Con pequeñas imágenes radiolúcidas ramificadas en su interior compatibles con broncogramas aéreos.",
+                patron: "Patrón Alveolar",
+                id: "ID. NEUMONIA EN EL LOBULO SUPERIOR DEL PULMON DERECHO",
+                signo: "Broncograma Aéreo & Borde Cisural Respetado",
+                svgOverlay: `
+                    <!-- Right Upper Lobe Opacity with Air Bronchogram -->
+                    <path d="M 45 45 Q 75 40 90 45 L 85 85 Q 50 85 45 45 Z" fill="#ffffff" opacity="0.85"/>
+                    <path d="M 55 50 L 65 70 M 65 70 L 75 80 M 65 70 L 60 80" stroke="#000000" stroke-width="2"/>
+                `
+            },
+            intersticial: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observan imágenes radiopacas de aspecto reticular, localizadas de manera dispersas en ambos pulmones. Con pérdida de la radiolucidez normal de los pulmones (pulmón sucio).",
+                patron: "Patrón Intersticial",
+                id: "ID. NEUMONIA (Patrón Intersticial Reticular)",
+                signo: "Aspecto Reticular - 'Pulmón Sucio'",
+                svgOverlay: `
+                    <!-- Reticular net over both lungs -->
+                    <path d="M 45 60 L 80 120 M 50 100 L 85 70 M 45 140 L 75 160 M 120 70 L 155 110 M 125 120 L 155 80" stroke="#ffffff" stroke-width="1.5" opacity="0.7"/>
+                `
+            },
+            atelectasico: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa imagen radiopaca de bordes poco definidos, localizada en el pulmón izquierdo, que retrae la tráquea, el mediastino y el hemidiafragma izquierdo. Existe hiperventilación pulmonar derecha y hernia pulmonar derecha. Presencia del signo de la columna desnuda.",
+                patron: "Patrón Atelectásico",
+                id: "ID. ATELECTASIA MASIVA EN EL PULMON IZQUIERDO",
+                signo: "Signo de la Columna Desnuda & Retracción Estructural",
+                svgOverlay: `
+                    <!-- Complete Left Lung Collapse & Tracheal Deviation -->
+                    <path d="M 100 40 Q 150 50 155 180 Z" fill="#ffffff" opacity="0.9"/>
+                    <line x1="95" y1="20" x2="120" y2="70" stroke="#38bdf8" stroke-width="4"/>
+                `
+            },
+            miliar: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observan imágenes radiopacas puntiformes distribuidas de manera dispersas en ambos pulmones.",
+                patron: "Patrón Miliar",
+                id: "ID. TUBERCULOSIS EN FASE MILIAR",
+                signo: "Múltiples Lesiones Puntiformes < 3 mm (Grano de Mijo)",
+                svgOverlay: `
+                    <!-- Multiple tiny dots scattered -->
+                    <circle cx="50" cy="60" r="2" fill="#fff"/><circle cx="70" cy="80" r="2" fill="#fff"/><circle cx="60" cy="120" r="2" fill="#fff"/>
+                    <circle cx="75" cy="150" r="2" fill="#fff"/><circle cx="130" cy="70" r="2" fill="#fff"/><circle cx="145" cy="100" r="2" fill="#fff"/>
+                    <circle cx="135" cy="140" r="2" fill="#fff"/><circle cx="150" cy="160" r="2" fill="#fff"/>
+                `
+            },
+            nodular_benigno: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa imagen redondeada, radiopaca, de bordes regulares, menor a 3 cm, localizada en el lóbulo superior del pulmón derecho.",
+                patron: "Patrón Nodular Solitario (Aspecto Benigno)",
+                id: "ID. NÓDULO PULMONAR SOLITARIO DE ASPECTO BENIGNO",
+                signo: "Redondeado < 3 cm, Bordes Regulares y Definidos",
+                svgOverlay: `
+                    <!-- Smooth circumscribed nodule -->
+                    <circle cx="65" cy="65" r="12" fill="#ffffff"/>
+                `
+            },
+            nodular_maligno: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa imagen redondeada, radiopaca, de bordes irregulares, menor a 3 cm, localizada en el lóbulo superior del pulmón derecho.",
+                patron: "Patrón Nodular Solitario (Aspecto Maligno)",
+                id: "ID. NÓDULO PULMONAR SOLITARIO DE ASPECTO MALIGNO",
+                signo: "Bordes Irregulares y Espiculados (< 3 cm)",
+                svgOverlay: `
+                    <!-- Spiculated nodule -->
+                    <path d="M 65 50 L 68 58 L 76 56 L 71 63 L 78 70 L 69 71 L 68 80 L 62 73 L 54 75 L 59 67 L 52 61 L 60 61 Z" fill="#ffffff"/>
+                `
+            },
+            nodular_multiple: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observan imágenes radiopacas redondeadas, distribuidas de manera dispersas en ambos pulmones. Presencia del signo en suelta globos.",
+                patron: "Patrón Nodular Múltiple",
+                id: "ID. METÁSTASIS PULMONARES",
+                signo: "Signo en 'Suelta de Globos'",
+                svgOverlay: `
+                    <!-- Multiple round nodules of varying sizes -->
+                    <circle cx="55" cy="80" r="10" fill="#fff"/><circle cx="75" cy="140" r="14" fill="#fff"/>
+                    <circle cx="140" cy="90" r="12" fill="#fff"/><circle cx="130" cy="150" r="8" fill="#fff"/>
+                `
+            },
+            masa: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa imagen redondeada radiopaca, de bordes lobulados e irregulares, mayor a 3 cm, localizada en el pulmón izquierdo a nivel de la región hiliar.",
+                patron: "Patrón Masa",
+                id: "ID. MASA PULMONAR IZQUIERDA",
+                signo: "Lesión Expansiva Mayor a 3 cm (> 3 cm)",
+                svgOverlay: `
+                    <!-- Large lobulated mass > 3cm -->
+                    <circle cx="135" cy="110" r="28" fill="#ffffff"/>
+                `
+            },
+            hiliar: {
+                examen: "RX STÁNDAR DE TÓRAX",
+                descripcion: "Se observa engrosamiento de aspecto nodular radiopaco de bordes lobulados (imágenes nodulares o redondeadas agrupadas) en regiones hiliares derecha e izquierda.",
+                patron: "Patrón Hiliar Bilateral",
+                id: "ID. ADENOPATIAS HILIARES",
+                signo: "Imágenes Nodulares Agrupadas Lobuladas Hiliares D e I",
+                svgOverlay: `
+                    <!-- Bilateral hilar adenopathies -->
+                    <circle cx="80" cy="105" r="12" fill="#fff"/><circle cx="85" cy="120" r="10" fill="#fff"/>
+                    <circle cx="115" cy="100" r="13" fill="#fff"/><circle cx="120" cy="115" r="11" fill="#fff"/>
+                `
+            }
+        };
+
+        // Select Pattern Logic
+        function selectPattern(patKey) {
+            const data = patternsData[patKey];
+            if (!data) return;
+
+            // Highlight active button
+            const btns = document.querySelectorAll('.pat-btn');
+            btns.forEach(b => {
+                b.classList.remove('border-sky-500', 'bg-sky-950/60', 'text-sky-300');
+                b.classList.add('bg-slate-950', 'border-slate-800', 'text-slate-300');
+            });
+            const activeBtn = document.getElementById('btn-pat-' + patKey);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-950', 'border-slate-800', 'text-slate-300');
+                activeBtn.classList.add('border-sky-500', 'bg-sky-950/60', 'text-sky-300');
+            }
+
+            // Update Report Fields
+            document.getElementById('rep-examen').innerText = data.examen;
+            document.getElementById('rep-descripcion').innerText = data.descripcion;
+            document.getElementById('rep-patron').innerText = data.patron;
+            document.getElementById('rep-id').innerText = data.id;
+
+            // Update Overlay Canvas
+            document.getElementById('pattern-sign-tag').innerText = "Signo Guiá: " + data.signo;
+            const overlayContainer = document.getElementById('pattern-overlay');
+            overlayContainer.innerHTML = `
+                <svg class="w-full h-full" viewBox="0 0 200 240">
+                    ${data.svgOverlay}
+                </svg>
+            `;
+        }
+
+        // On Window Load
+        window.onload = function() {
+            // Default active section is Portada
+            navigateTo('portada');
+
+            // Initialize simulators defaults
+            updateRxSimulation();
+            selectPattern('alveolar');
+        };
+    </script>
+</body>
+</html>
